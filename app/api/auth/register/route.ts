@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { createSession, hashPassword } from "@/lib/auth";
+export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   try {
