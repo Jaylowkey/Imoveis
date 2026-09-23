@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function PublicarPage() {
   const router = useRouter();
@@ -23,7 +24,7 @@ export default function PublicarPage() {
 
   if(sent) return <main className="form-page"><div className="form-card success"><div className="success-icon">✓</div><h1>Imóvel enviado</h1><p className="muted">O anúncio foi guardado e está pendente de revisão. Depois da aprovação, ficará disponível no marketplace.</p><button className="btn btn-primary" onClick={()=>router.push("/dashboard")}>Ir para o meu painel</button></div></main>;
 
-  return <main className="form-page"><div className="form-card"><div className="eyebrow dark">Para proprietários e agentes</div><h1>Publicar imóvel</h1><p className="muted">Preencha os dados principais. O anúncio será revisto antes de ficar público.</p>
+  return <main className="form-page"><div className="form-card"><div className="eyebrow dark">Para proprietários e agentes</div><h1>Publicar imóvel</h1><p className="muted">Preencha os dados principais. O anúncio será revisto antes de ficar público.</p><p className="muted">Precisa de uma conta? <Link href="/auth">Entrar ou criar conta</Link></p>
     <form onSubmit={submit} className="publish-form">
       <label>Título do anúncio<input name="title" required placeholder="Ex.: Moradia T4 moderna em Maputo" /></label>
       <div className="two"><label>Finalidade<select name="purpose" required><option>Venda</option><option>Arrendamento</option></select></label><label>Tipo<select name="category" required><option>Casa</option><option>Apartamento</option><option>Terreno</option><option>Comercial</option></select></label></div>
