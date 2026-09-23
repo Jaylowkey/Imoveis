@@ -11,7 +11,8 @@ export async function POST(request: Request) {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) return NextResponse.json({ error: "Email inválido." }, { status: 400 });
     if (await prisma.user.findUnique({ where: { email: normalizedEmail } })) return NextResponse.json({ error: "Este email já está registado." }, { status: 409 });
 
-    const safeRole = ["OWNER", "AGENT", "AGENCY"].includes(String(role)) ? String(role) as "OWNER" | "AGENT" | "AGENCY" : "CLIENT";
+    const adminEmails = (process.env.ADMIN_EMAILS || "").split(",").map(x => x.trim().toLowerCase()).filter(Boolean);
+    const safeRole = adminEmails.includes(normalizedEmail) ? "ADMIN" : (["OWNER", "AGENT", "AGENCY"].includes(String(role)) ? String(role) as "OWNER" | "AGENT" | "AGENCY" : "CLIENT");
     const user = await prisma.user.create({ data: { name: String(name).trim(), email: normalizedEmail, phone: phone ? String(phone).trim() : null, passwordHash: await hashPassword(String(password)), role: safeRole } });
     await createSession({ id: user.id, name: user.name, email: user.email, role: user.role });
     return NextResponse.json({ ok: true, user: { id: user.id, name: user.name, email: user.email, role: user.role } }, { status: 201 });
