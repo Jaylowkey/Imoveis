@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getCurrentUser } from "@/lib/auth";
 
 const purposeMap = { Venda: "SALE", Arrendamento: "RENT" } as const;
 const categoryMap = { Casa: "HOUSE", Apartamento: "APARTMENT", Terreno: "LAND", Comercial: "COMMERCIAL" } as const;
@@ -8,6 +9,8 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { title, purpose, category, price, area, city, location, description, contact } = body;
+    const currentUser = await getCurrentUser();
+    if (!currentUser) return NextResponse.json({ error: "Inicie sessão para publicar um imóvel." }, { status: 401 });
 
     if (!title || !purpose || !category || !price || !area || !city || !location || !description || !contact) {
       return NextResponse.json({ error: "Preencha todos os campos obrigatórios." }, { status: 400 });
@@ -16,9 +19,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Finalidade ou tipo inválido." }, { status: 400 });
     }
 
-    const email = `pending+${String(contact).replace(/\D/g, "").slice(-9)}@imoveis.local`;
-    let owner = await prisma.user.findUnique({ where: { email } });
-    if (!owner) owner = await prisma.user.create({ data: { email, phone: String(contact), name: "Anunciante" } });
+    const owner = currentUser;
 
     const baseSlug = String(title).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
     const property = await prisma.property.create({
