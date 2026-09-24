@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { formatPrice, properties as samples } from "@/lib/properties";
-import { prisma } from "@/lib/prisma";
+import { formatPrice, properties as samples } from "../../lib/properties";
+import { prisma } from "../../lib/prisma";
 
 export default async function PropertyPage({ params }: { params: Promise<{ slug: string }> }) {
  const {slug}=await params;
