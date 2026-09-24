@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { formatPrice, properties as samples } from "@/lib/properties";
-import { prisma } from "@/lib/prisma";
+import { formatPrice, properties as samples } from "../../lib/properties";
+import { prisma } from "../../lib/prisma";
 
 export default async function ImoveisPage({ searchParams }: { searchParams: Promise<{ q?: string; purpose?: string; category?: string }> }) {
   const params = await searchParams;
