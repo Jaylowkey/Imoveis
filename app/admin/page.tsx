@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
-import { getCurrentUser } from "@/lib/auth";
+import { prisma } from "../../lib/prisma";
+import { getCurrentUser } from "../../lib/auth";
 import AdminModeration from "./moderation";
 
 export default async function AdminPage() {
