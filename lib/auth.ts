@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
 import bcrypt from "bcryptjs";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "./prisma";
 
 const COOKIE = "imoveis_session";
 const secret = new TextEncoder().encode(process.env.AUTH_SECRET || "change-this-in-production");
